@@ -49,6 +49,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  dotted_border:
+    dependency: "direct main"
+    description:
+      name: dotted_border
+      sha256: d86e8907d235a1135f3a404cf9318f2aa5a55f3415975286ad0b6c08875bb5fb
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -123,6 +131,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.2"
+  path_drawing:
+    dependency: transitive
+    description:
+      name: path_drawing
+      sha256: "3bdd251dae9ffaef944450b73f168610db7e968e7b20daf0c3907f8b4aafc8a2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.1+1"
+  path_parsing:
+    dependency: transitive
+    description:
+      name: path_parsing
+      sha256: ee5c47c1058ad66b4a41746ec3996af9593d0858872807bcd64ac118f0700337
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -186,3 +210,4 @@ packages:
     version: "2.1.4"
 sdks:
   dart: ">=2.19.4 <3.0.0"
+  flutter: ">=1.24.0-7.0"
