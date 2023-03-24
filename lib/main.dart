@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './widget/task.dart';
+import './widget/countdownTimer.dart';
 
 void main() => runApp(MyApp());
 
@@ -36,7 +37,7 @@ class HomePage extends StatelessWidget {
       body: Container(
           child: Column(
         children: [
-          Text('clock'),
+          CountdownTimerPomo(),
           Tasks(),
         ],
       )),
