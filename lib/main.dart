@@ -22,25 +22,50 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String pomodoroState = 'pomodoro';
+
+  setPomodoroSate(String state) {
+    setState(() {
+      pomodoroState = state;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.redAccent,
+      backgroundColor: pomodoroState == 'pomodoro'
+          ? Colors.red.shade300
+          : pomodoroState == 'short break'
+              ? Colors.teal.shade300
+              : Colors.indigo.shade400,
       appBar: AppBar(
         title: Text(
           'Pomodoro',
         ),
+        backgroundColor: pomodoroState == 'pomodoro'
+            ? Colors.red.shade300
+            : pomodoroState == 'short break'
+                ? Colors.teal.shade300
+                : Colors.indigo.shade400,
       ),
       body: Container(
+          width: double.infinity,
           child: Column(
-        children: [
-          CountdownTimerPomo(),
-          Tasks(),
-        ],
-      )),
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CountdownTimerPomo(
+                pomodoroState: pomodoroState,
+                setPomodoroState: setPomodoroSate,
+              ),
+              // Tasks(),
+            ],
+          )),
     );
   }
 }

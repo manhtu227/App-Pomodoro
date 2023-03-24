@@ -30,8 +30,6 @@ void handleCancelForm() {
       padding: EdgeInsets.all(10),
       child: Column(
         children: [
-          Text("#0"),
-          Text("Time to focus"),
           SizedBox(
             height: 10,
           ),

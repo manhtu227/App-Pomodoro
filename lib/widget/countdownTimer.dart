@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 class CountdownTimerPomo extends StatefulWidget {
-  const CountdownTimerPomo({super.key});
+  String pomodoroState;
+  Function setPomodoroState;
+  CountdownTimerPomo(
+      {required this.pomodoroState, required this.setPomodoroState});
 
   @override
   State<CountdownTimerPomo> createState() => _CountdownTimerPomoState();
@@ -10,12 +13,12 @@ class CountdownTimerPomo extends StatefulWidget {
 
 class _CountdownTimerPomoState extends State<CountdownTimerPomo> {
   int countPomodoro = 0;
-  bool pomodoroBreakState = false;
   bool countdownState = false;
   Duration duration = Duration(seconds: 25);
   Timer? countdownTimer;
 
   startTimer() {
+    setCountdown();
     countdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
       setCountdown();
     });
@@ -28,10 +31,23 @@ class _CountdownTimerPomoState extends State<CountdownTimerPomo> {
     });
   }
 
-  resetTimer() {
-    stopTimer();
+  nextTimer() {
     setState(() {
-      duration = Duration(minutes: 25);
+      countdownState = false;
+      countdownTimer!.cancel();
+      if (widget.pomodoroState == 'pomodoro') {
+        countPomodoro += 1;
+        if (countPomodoro % 4 == 0) {
+          widget.setPomodoroState('long break');
+          duration = Duration(seconds: 15);
+        } else {
+          widget.setPomodoroState('short break');
+          duration = Duration(seconds: 5);
+        }
+      } else {
+        widget.setPomodoroState('pomodoro');
+        duration = Duration(seconds: 25);
+      }
     });
   }
 
@@ -42,19 +58,41 @@ class _CountdownTimerPomoState extends State<CountdownTimerPomo> {
       if (second < 0) {
         countdownState = false;
         countdownTimer!.cancel();
-        if (pomodoroBreakState == false) {
-          pomodoroBreakState = true;
+        if (widget.pomodoroState == 'pomodoro') {
           countPomodoro += 1;
-          if (countPomodoro % 4 == 0)
+          if (countPomodoro % 4 == 0) {
+            widget.setPomodoroState('long break');
             duration = Duration(seconds: 15);
-          else
+          } else {
+            widget.setPomodoroState('short break');
             duration = Duration(seconds: 5);
+          }
         } else {
-          pomodoroBreakState = false;
+          widget.setPomodoroState('pomodoro');
           duration = Duration(seconds: 25);
         }
       } else {
         duration = Duration(seconds: second);
+      }
+    });
+  }
+
+  changeState(String state) {
+    setState(() {
+      countdownState = false;
+      switch (state) {
+        case 'pomodoro':
+          widget.setPomodoroState('pomodoro');
+          duration = Duration(seconds: 25);
+          break;
+        case 'short break':
+          widget.setPomodoroState('short break');
+          duration = Duration(seconds: 5);
+          break;
+        case 'long break':
+          widget.setPomodoroState('long break');
+          duration = Duration(seconds: 15);
+          break;
       }
     });
   }
@@ -72,7 +110,11 @@ class _CountdownTimerPomoState extends State<CountdownTimerPomo> {
             padding: EdgeInsets.symmetric(vertical: 20),
             width: 350,
             decoration: BoxDecoration(
-                color: Colors.red.shade400,
+                color: widget.pomodoroState == 'pomodoro'
+                    ? Colors.red.shade200
+                    : widget.pomodoroState == 'short break'
+                        ? Colors.teal.shade200
+                        : Colors.indigo.shade300,
                 borderRadius: BorderRadius.circular(5)),
             child: Column(
               children: [
@@ -80,36 +122,36 @@ class _CountdownTimerPomoState extends State<CountdownTimerPomo> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
-                      onPressed: () => {},
+                      onPressed: () => {changeState('pomodoro')},
                       child: Text(
                         'Pomodoro',
                         style: TextStyle(color: Colors.white),
                       ),
-                      style: pomodoroBreakState
-                          ? null
-                          : ButtonStyle(
-                              backgroundColor:
-                                  MaterialStatePropertyAll(Colors.blue)),
-                    ),
-                    TextButton(
-                      onPressed: () => {},
-                      child: Text(
-                        'Short break',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      style: (pomodoroBreakState && countPomodoro % 4 != 0)
+                      style: widget.pomodoroState == 'pomodoro'
                           ? ButtonStyle(
                               backgroundColor:
                                   MaterialStatePropertyAll(Colors.blue))
                           : null,
                     ),
                     TextButton(
-                      onPressed: () => {},
+                      onPressed: () => {changeState('short break')},
+                      child: Text(
+                        'Short break',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: (widget.pomodoroState == 'short break')
+                          ? ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.blue))
+                          : null,
+                    ),
+                    TextButton(
+                      onPressed: () => {changeState('long break')},
                       child: Text(
                         'Long break',
                         style: TextStyle(color: Colors.white),
                       ),
-                      style: (pomodoroBreakState && countPomodoro % 4 == 0)
+                      style: (widget.pomodoroState == 'long break')
                           ? ButtonStyle(
                               backgroundColor:
                                   MaterialStatePropertyAll(Colors.blue))
@@ -137,10 +179,14 @@ class _CountdownTimerPomoState extends State<CountdownTimerPomo> {
                                 }
                               },
                               child: Text(
-                                'Stop',
+                                'STOP',
                                 style: TextStyle(
                                   fontSize: 25,
-                                  color: Colors.red,
+                                  color: widget.pomodoroState == 'pomodoro'
+                                      ? Colors.red.shade300
+                                      : widget.pomodoroState == 'short break'
+                                          ? Colors.teal.shade300
+                                          : Colors.indigo.shade400,
                                 ),
                               ),
                               style: ButtonStyle(
@@ -150,10 +196,14 @@ class _CountdownTimerPomoState extends State<CountdownTimerPomo> {
                           : ElevatedButton(
                               onPressed: startTimer,
                               child: Text(
-                                'Start',
+                                'START',
                                 style: TextStyle(
                                   fontSize: 25,
-                                  color: Colors.red,
+                                  color: widget.pomodoroState == 'pomodoro'
+                                      ? Colors.red.shade300
+                                      : widget.pomodoroState == 'short break'
+                                          ? Colors.teal.shade300
+                                          : Colors.indigo.shade400,
                                 ),
                               ),
                               style: ButtonStyle(
@@ -164,7 +214,7 @@ class _CountdownTimerPomoState extends State<CountdownTimerPomo> {
                     !countdownState
                         ? SizedBox(width: 40)
                         : IconButton(
-                            onPressed: () => {},
+                            onPressed: () => {nextTimer()},
                             icon: Icon(
                               Icons.skip_next,
                               color: Colors.white,
@@ -175,7 +225,9 @@ class _CountdownTimerPomoState extends State<CountdownTimerPomo> {
             ),
           ),
           Text("#${countPomodoro}"),
-          pomodoroBreakState ? Text("Time for a break") : Text('Time to focus'),
+          widget.pomodoroState == 'pomodoro'
+              ? Text("Time to focus")
+              : Text('Time for a break'),
         ],
       ),
     );
