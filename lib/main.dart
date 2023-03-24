@@ -45,9 +45,77 @@ class _HomePageState extends State<HomePage> {
               ? Colors.teal.shade300
               : Colors.indigo.shade400,
       appBar: AppBar(
-        title: Text(
-          'Pomodoro',
+        title: Row(
+          children: [
+            Icon(Icons.check_circle_rounded),
+            Text(
+              'Pomodoro',
+            ),
+          ],
         ),
+        actions: [
+          Container(
+            margin: EdgeInsets.all(10),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(
+                pomodoroState == 'pomodoro'
+                    ? Colors.red.shade200
+                    : pomodoroState == 'short break'
+                        ? Colors.teal.shade200
+                        : Colors.indigo.shade300,
+              )),
+              onPressed: () {},
+              child: Row(
+                children: [
+                  Icon(Icons.insert_chart_outlined_rounded),
+                  Text('Report'),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.all(10),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(
+                pomodoroState == 'pomodoro'
+                    ? Colors.red.shade200
+                    : pomodoroState == 'short break'
+                        ? Colors.teal.shade200
+                        : Colors.indigo.shade300,
+              )),
+              onPressed: () {},
+              child: Row(
+                children: [
+                  Icon(Icons.settings),
+                  Text('Settings'),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.all(10),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(
+                pomodoroState == 'pomodoro'
+                    ? Colors.red.shade200
+                    : pomodoroState == 'short break'
+                        ? Colors.teal.shade200
+                        : Colors.indigo.shade300,
+              )),
+              onPressed: () {},
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Icon(Icons.supervised_user_circle),
+                  Text('Login'),
+                ],
+              ),
+            ),
+          ),
+        ],
         backgroundColor: pomodoroState == 'pomodoro'
             ? Colors.red.shade300
             : pomodoroState == 'short break'
