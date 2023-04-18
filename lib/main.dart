@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import './widget/task.dart';
-import './widget/countdownTimer.dart';
+import './screens/pomodoro_screen.dart';
+import 'package:provider/provider.dart';
+import './providers/Tasks.dart';
 
 void main() => runApp(MyApp());
 
@@ -9,63 +10,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Pomodoro',
-      theme: ThemeData(
-        primarySwatch: Colors.purple,
-        textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.white)),
-        accentColor: Colors.amber,
-        fontFamily: 'Quicksand',
-      ),
-      home: HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  String pomodoroState = 'pomodoro';
-
-  setPomodoroSate(String state) {
-    setState(() {
-      pomodoroState = state;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: pomodoroState == 'pomodoro'
-          ? Colors.red.shade300
-          : pomodoroState == 'short break'
-              ? Colors.teal.shade300
-              : Colors.indigo.shade400,
-      appBar: AppBar(
-        title: Text(
-          'Pomodoro',
-        ),
-        backgroundColor: pomodoroState == 'pomodoro'
-            ? Colors.red.shade300
-            : pomodoroState == 'short break'
-                ? Colors.teal.shade300
-                : Colors.indigo.shade400,
-      ),
-      body: Container(
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CountdownTimerPomo(
-                pomodoroState: pomodoroState,
-                setPomodoroState: setPomodoroSate,
-              ),
-              // Tasks(),
-            ],
-          )),
-    );
+    return ChangeNotifierProvider(
+        create: (_) => Tasks(),
+        child: MaterialApp(
+          title: 'Pomodoro',
+          theme: ThemeData(
+            primarySwatch: Colors.purple,
+            textTheme:
+                const TextTheme(bodyMedium: TextStyle(color: Colors.white)),
+            accentColor: Colors.amber,
+            fontFamily: 'Quicksand',
+          ),
+          home: PomodoroScreen(),
+        ));
   }
 }
