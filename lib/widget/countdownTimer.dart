@@ -96,6 +96,7 @@ class _CountdownTimerPomoState extends State<CountdownTimerPomo> {
 
   changeState(String state) {
     setState(() {
+      if (countdownTimer != null) countdownTimer!.cancel();
       countdownState = false;
       switch (state) {
         case 'pomodoro':
